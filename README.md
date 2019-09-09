@@ -4,9 +4,9 @@ Pixels, voxels, asceils... Convert images to colored ASCII.
 
 # Windows Terminal Showcase
 
-Johny, Marylin, Mondrian, Mona, R2D2 and Freedom...
+Johnny, Marylin, Mondrian, Mona, R2D2 and Freedom...
 
-![johny](https://user-images.githubusercontent.com/11328666/64559608-60b71880-d34f-11e9-9f8a-eb3b95fcb156.png)
+![johnny](https://user-images.githubusercontent.com/11328666/64559608-60b71880-d34f-11e9-9f8a-eb3b95fcb156.png)
 
 ![marylin](https://user-images.githubusercontent.com/11328666/64559624-6876bd00-d34f-11e9-9509-7fdeb84809b5.png)
 
