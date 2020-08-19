@@ -8,7 +8,7 @@ namespace Asceils
     class Program
     {
         const string IMAGE_DIR = @"..\..\..\img";
-        const float FONT_ASPECT = 8f / 12f; // width/height (in pixels), it's a good idea to use fixed size console fonts.
+        const float FONT_ASPECT = 8f / 12f; // width divided by height in pixels
         const int CONSOLE_W = 80;
 
         static void Main(string[] args)
