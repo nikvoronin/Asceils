@@ -9,14 +9,28 @@ namespace Asceils
     {
         const string IMAGE_DIR = @"..\..\..\img";
         const float FONT_ASPECT = 8f / 12f; // width/height (in pixels), it's a good idea to use fixed size console fonts.
+        const int CONSOLE_W = 80;
 
         static void Main(string[] args)
         {
-            foreach(var filename in ImageSamples) {
+            var options = new PicToAsciiOptions() {
+                FixedDimension = PicToAsciiOptions.Fix.Horizontal,
+                FixedSize = CONSOLE_W,
+                SymbolAspectRatio = FONT_ASPECT
+            };
+
+            var converter = new PicToAscii(options);
+
+            foreach (var filename in ImageSamples) {
                 IReadOnlyList<ColorTape> colorTapes;
                 try {
-                    using (Stream stream = File.OpenRead(filename))
-                        colorTapes = PicToAscii.Convert(stream, PicToAscii.Fix.Horizontal, size: 80, FONT_ASPECT);
+                    using Stream stream = File.OpenRead(filename);
+                    //colorTapes = PicToAscii.CreateDefault.Convert(stream);
+
+                    converter.Options.AsciiChars = Environment.TickCount % 2 == 0 
+                        ? PicToAsciiOptions.ASCII_SOLID 
+                        : PicToAsciiOptions.ASCII_SYMBOLIC;
+                    colorTapes = converter.Convert(stream);
                 }
                 catch {
                     continue;
