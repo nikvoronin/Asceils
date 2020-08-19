@@ -64,9 +64,10 @@ namespace Asceils
             ConsoleColor lastColor = ConsoleColor.Black;
 
             for (int y = 0; y < height; y++) {
-                for (int x = 0; x < width; x++) {
-                    Rgb24 c = reduced[x, y];
-                    (ConsoleColor cc, char symbol) = ToColoredChar(c);
+                ReadOnlySpan<Rgb24> row = reduced.GetPixelRowSpan(y);
+
+                foreach(var c in row) {
+                    ConsoleColor cc = ToConsoleColor(c, Options.Threshold_Black);
 
                     if (lastColor != cc) {
                         if (chunkBuilder.Length > 0) {
@@ -78,6 +79,8 @@ namespace Asceils
                         lastColor = cc;
                     }
 
+                    Hsl hsl = _spaceConverter.ToHsl(c);
+                    char symbol = BrightnessToChar(hsl.L, Options.AsciiChars);
                     chunkBuilder.Append(symbol);
                 }
 
@@ -88,16 +91,6 @@ namespace Asceils
                 chunks.Add(new ColorTape(chunkBuilder.ToString(), lastColor));
 
             return chunks;
-        }
-
-        private (ConsoleColor, char) ToColoredChar(Rgb24 c)
-        {
-            Hsl hsl = _spaceConverter.ToHsl(c);
-
-            char symbol = BrightnessToChar(hsl.L, Options.AsciiChars);
-            ConsoleColor cc = ToConsoleColor(c, Options.Threshold_Black);
-
-            return (cc, symbol);
         }
 
         private char BrightnessToChar(float bright, string symbols)
