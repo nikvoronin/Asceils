@@ -5,7 +5,6 @@ using System.Text;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
-using SixLabors.ImageSharp.ColorSpaces;
 using SixLabors.ImageSharp.ColorSpaces.Conversion;
 using SixLabors.ImageSharp.Processing.Processors.Transforms;
 
@@ -56,7 +55,7 @@ namespace Asceils
         /// <returns>Colored tapes ready to print to the console</returns>
         private IReadOnlyList<ColorTape> ConvertInternal(Image<Rgb24> source, int width, int height)
         {            
-            using var reduced = source.Clone(x => x.Resize(width, height, Options.Resampler, true));
+            using var reduced = source.Clone(x => x.Resize(width, height, Options.Resampler));
 
             var chunks = new List<ColorTape>();
 
