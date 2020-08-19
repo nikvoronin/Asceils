@@ -12,9 +12,7 @@ namespace Asceils
 
         static void Main(string[] args)
         {
-            var samples = GetSamples();
-
-            foreach(var filename in samples) {
+            foreach(var filename in ImageSamples) {
                 IReadOnlyList<ColorTape> colorTapes;
                 try {
                     using (Stream stream = File.OpenRead(filename))
@@ -31,14 +29,11 @@ namespace Asceils
             }
         }
 
-        private static IEnumerable<string> GetSamples()
-        {
-            return Directory
-                .GetFiles(IMAGE_DIR, "*", SearchOption.TopDirectoryOnly)
-                .Where(f => f.LastIndexOf(".jpg") > -1
-                         || f.LastIndexOf(".jpeg") > -1
-                         || f.LastIndexOf(".png") > -1);
-        }
+        private static IEnumerable<string> ImageSamples => Directory 
+            .GetFiles(IMAGE_DIR, "*", SearchOption.TopDirectoryOnly)
+            .Where(f => f.LastIndexOf(".jpg" ) > -1
+                     || f.LastIndexOf(".jpeg") > -1
+                     || f.LastIndexOf(".png" ) > -1);
 
         private static void PrintTapes(IReadOnlyList<ColorTape> colorTapes)
         {
