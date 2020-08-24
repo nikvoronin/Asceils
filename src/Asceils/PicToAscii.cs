@@ -72,6 +72,7 @@ namespace Asceils
                         if (chunkBuilder.Length > 0) {
                             var tape = new ColorTape(chunkBuilder.ToString(), lastColor);
                             chunks.Add(tape);
+
                             chunkBuilder.Clear();
                         }
 
@@ -79,7 +80,7 @@ namespace Asceils
                     }
 
                     float bright = _colorSpaceConvert.ToHsl(rgb).L;
-                    char symbol = BrightnessToChar(bright, Options.AsciiChars);
+                    char symbol = BrightnessToChar(bright, Options.AsciiTable);
                     chunkBuilder.Append(symbol);
                 }
 
@@ -108,10 +109,11 @@ namespace Asceils
                 ) ? 8 : 0;
 
             // color bits
-            float max = Math.Max(Math.Max(c.R, c.G), c.B);
-            index |= (c.R / max > Options.Threshold_Black) ? 4 : 0;
-            index |= (c.G / max > Options.Threshold_Black) ? 2 : 0;
-            index |= (c.B / max > Options.Threshold_Black) ? 1 : 0;
+            var t = Options.Threshold_ValuableColor;
+            float max = Math.Max(c.R, Math.Max(c.G, c.B));
+            index |= (c.R / max > t) ? 4 : 0;
+            index |= (c.G / max > t) ? 2 : 0;
+            index |= (c.B / max > t) ? 1 : 0;
 
             return (ConsoleColor)index;
         }
@@ -119,13 +121,13 @@ namespace Asceils
 
     public class PicToAsciiOptions
     {
-        // sorted ascending by bright: dark --> light
-        public const string ASCII_SOLID = " ░▒▓█";
-        public const string ASCII_SYMBOLIC = " `'.,:;i+o*%&$#@";
+        // sorted ascending by brightness: darker --> lighter
+        public const string ASCIITABLE_SOLID = " ░▒▓█";
+        public const string ASCIITABLE_SYMBOLIC = " `'.,:;i+o*%&$#@";
 
         public IResampler Resampler = new BicubicResampler();
 
-        public float Threshold_Black = .8f;
+        public float Threshold_ValuableColor = .8f;
         public int Threshold_RedBright = 200;
         public int Threshold_GreenBright = 170;
         public int Threshold_BlueBright = 220;
@@ -134,11 +136,11 @@ namespace Asceils
         public Fix FixedDimension = Fix.Horizontal;
         public int FixedSize = 80;
 
-        public string AsciiChars = ASCII_SOLID;
+        public string AsciiTable = ASCIITABLE_SOLID;
         public float SymbolAspectRatio = .5f;
     }
 
-    public struct ColorTape
+    public class ColorTape
     {
         public ColorTape(string chunk, ConsoleColor color)
         {

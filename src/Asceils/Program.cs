@@ -7,9 +7,9 @@ namespace Asceils
 {
     class Program
     {
-        const string IMAGE_DIR = @"..\..\..\img";
-        const float FONT_ASPECT = 8f / 12f; // width divided by height in pixels
-        const int CONSOLE_W = 80;
+        const string IMAGESAMPLES_PATH = @"..\..\..\img";   // path to image samples
+        const float FONT_ASPECT = 8f / 12f;                 // symbol width divided by height in pixels
+        const int CONSOLE_W = 80;                           // console width in chars
 
         static void Main(string[] args)
         {
@@ -19,18 +19,19 @@ namespace Asceils
                 SymbolAspectRatio = FONT_ASPECT
             };
 
-            var converter = new PicToAscii(options);
+            var pic2ascii = new PicToAscii(options);
 
             foreach (var filename in ImageSamples) {
                 IReadOnlyList<ColorTape> colorTapes;
                 try {
                     using Stream stream = File.OpenRead(filename);
-                    //colorTapes = PicToAscii.CreateDefault.Convert(stream);
 
-                    converter.Options.AsciiChars = Environment.TickCount % 2 == 0 
-                        ? PicToAsciiOptions.ASCII_SOLID 
-                        : PicToAsciiOptions.ASCII_SYMBOLIC;
-                    colorTapes = converter.Convert(stream);
+                    pic2ascii.Options.AsciiTable = Environment.TickCount % 2 == 0 
+                        ? PicToAsciiOptions.ASCIITABLE_SOLID 
+                        : PicToAsciiOptions.ASCIITABLE_SYMBOLIC;
+
+                    //colorTapes = PicToAscii.CreateDefault.Convert(stream);
+                    colorTapes = pic2ascii.Convert(stream);
                 }
                 catch {
                     continue;
@@ -44,16 +45,16 @@ namespace Asceils
         }
 
         private static IEnumerable<string> ImageSamples => Directory 
-            .GetFiles(IMAGE_DIR, "*", SearchOption.TopDirectoryOnly)
+            .GetFiles(IMAGESAMPLES_PATH, "*", SearchOption.TopDirectoryOnly)
             .Where(f => f.LastIndexOf(".jpg" ) > -1
                      || f.LastIndexOf(".jpeg") > -1
                      || f.LastIndexOf(".png" ) > -1);
 
         private static void PrintTapes(IReadOnlyList<ColorTape> colorTapes)
         {
-            foreach (var cs in colorTapes) {
-                Console.ForegroundColor = cs.ForeColor;
-                Console.Write(cs.Chunk);
+            foreach (var tape in colorTapes) {
+                Console.ForegroundColor = tape.ForeColor;
+                Console.Write(tape.Chunk);
             }
 
             Console.ResetColor();
