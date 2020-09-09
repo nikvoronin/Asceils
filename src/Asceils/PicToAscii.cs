@@ -124,6 +124,7 @@ namespace Asceils
         // sorted ascending by brightness: darker --> lighter
         public const string ASCIITABLE_SOLID = " ░▒▓█";
         public const string ASCIITABLE_SYMBOLIC = " `'.,:;i+o*%&$#@";
+        public const string ASCIITABLE_SYMBOLIC_LIGHT = " `'.,:;i+o*wW%&$#@▒▓█";
 
         public IResampler Resampler = new BicubicResampler();
 
