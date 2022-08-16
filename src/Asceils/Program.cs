@@ -7,7 +7,7 @@ namespace Asceils
 {
     class Program
     {
-        const string IMAGESAMPLES_PATH = @"..\..\..\img";   // path to image samples
+        const string IMAGESAMPLES_PATH = @"/../../DIR";   // path to image samples
         const float FONT_ASPECT = 8f / 12f;                 // symbol width divided by height in pixels
         const int CONSOLE_W = 80;                           // console width in chars
 
@@ -26,9 +26,8 @@ namespace Asceils
                 try {
                     using Stream stream = File.OpenRead(filename);
 
-                    pic2ascii.Options.AsciiTable = Environment.TickCount % 2 == 0 
-                        ? PicToAsciiOptions.ASCIITABLE_SOLID 
-                        : PicToAsciiOptions.ASCIITABLE_SYMBOLIC;
+                    pic2ascii.Options.AsciiTable = PicToAsciiOptions.ASCIITABLE_SYMBOLIC_LIGHT;
+                    
 
                     //colorTapes = PicToAscii.CreateDefault.Convert(stream);
                     colorTapes = pic2ascii.Convert(stream);
@@ -47,8 +46,8 @@ namespace Asceils
         private static IEnumerable<string> ImageSamples => Directory 
             .GetFiles(IMAGESAMPLES_PATH, "*", SearchOption.TopDirectoryOnly)
             .Where(f => f.LastIndexOf(".jpg" ) > -1
-                     || f.LastIndexOf(".jpeg") > -1
-                     || f.LastIndexOf(".png" ) > -1);
+                        || f.LastIndexOf(".jpeg") > -1
+                        || f.LastIndexOf(".png" ) > -1);
 
         private static void PrintTapes(IReadOnlyList<ColorTape> colorTapes)
         {

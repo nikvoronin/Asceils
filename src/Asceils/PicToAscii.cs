@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Advanced;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
 using SixLabors.ImageSharp.ColorSpaces.Conversion;
@@ -63,8 +64,7 @@ namespace Asceils
             ConsoleColor lastColor = ConsoleColor.Black;
 
             for (int y = 0; y < reduced.Height; y++) {
-                ReadOnlySpan<Rgb24> row = reduced.GetPixelRowSpan(y);
-
+                ReadOnlySpan<Rgb24> row = reduced.DangerousGetPixelRowMemory(y).ToArray();
                 foreach(var rgb in row) {
                     ConsoleColor cc = ToConsoleColor(rgb);
 
